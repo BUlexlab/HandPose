@@ -87,10 +87,14 @@ def main():
 
     # Begin capturing
     cap = cv2.VideoCapture(0)
-
+    width = 0
+    height = 0
+    if cap.isOpened(): 
+        width = int(cap.get(3))  # float
+        height = int(cap.get(4)) # float
     # Define the codec and create VideoWriter object
-    fourcc = cv2.VideoWriter_fourcc(*'XVID')
-    out = cv2.VideoWriter(currentPath + name_pose + '.avi', fourcc, 25.0, (640, 480))
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    out = cv2.VideoWriter(currentPath + name_pose + '.mp4', fourcc, 25.0, (width, height))
 
     while(cap.isOpened()):
         ret, frame = cap.read()
@@ -109,7 +113,7 @@ def main():
     out.release()
     cv2.destroyAllWindows()
 
-    vid = cv2.VideoCapture(currentPath + name_pose + '.avi')
+    vid = cv2.VideoCapture(currentPath + name_pose + '.mp4')
 
     # Check if the video
     if (not vid.isOpened()):

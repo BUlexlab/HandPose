@@ -14,9 +14,9 @@ import buildPosesDataset as dataset
 
 def train():
     batch_size = 128
-    epochs = 10
+    epochs = 100
     learning_rate = 0.01
-    model_name = "cnn/models/hand_poses_wGarbage_" + str(epochs) + ".h5"
+    model_name = "cnn/models/hand_poses_wGarbage_" + str(epochs) + ".h6"
 
     # input image dimensions
     img_rows, img_cols = 28, 28
@@ -40,8 +40,8 @@ def train():
     print(x_test.shape[0], 'test samples')
 
     # convert class vectors to binary class matrices
-    y_train = keras.utils.to_categorical(y_train, num_classes)
-    y_test = keras.utils.to_categorical(y_test, num_classes)
+    y_train = keras.utils.to_categorical(y_train, num_classes+1)
+    y_test = keras.utils.to_categorical(y_test, num_classes+1)
 
     ####### Model structure #######
     #model building
@@ -65,7 +65,7 @@ def train():
     # one more dropout for convergence' sake :) 
     model.add(Dropout(0.5))
     # output a softmax to squash the matrix into output probabilities
-    model.add(Dense(num_classes, activation='softmax'))
+    model.add(Dense(num_classes+1, activation='softmax'))
     # categorical ce since we have multiple classes (10)
     model.compile(loss=keras.losses.categorical_crossentropy,
                 optimizer=keras.optimizers.Adam(lr=learning_rate),

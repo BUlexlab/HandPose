@@ -26,8 +26,8 @@ def drawInferences(values, names=['', '', '', '', '', '']):
     cv2.imshow("Inferences", blank)
 
 def test():
-    values = [0.2, 0.3, 0.1, 0.9, 0.6, 0.21]
-    names = ['Four', 'Dang', 'Startrek', 'Fist', 'Palm', 'Garbage']
+    values = [0.0, 0.0,  0.00, 0.0,0.0,0.0]
+    names = ['2', '9', 'Garbage', 'a','w','7']
     while(True):
         for i in range(len(values)):
             values[i] = randint(0, 100)/100

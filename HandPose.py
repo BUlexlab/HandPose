@@ -14,7 +14,7 @@ import keras
 import gui
 
 frame_processed = 0
-score_thresh = 0.18
+score_thresh = 0.01
 
 # Create a worker thread that loads graph and
 # does detection on images in an input queue and puts it on an output queue
@@ -27,7 +27,7 @@ def worker(input_q, output_q, cropped_output_q, inferences_q, cap_params, frame_
 
     print(">> loading keras model for worker")
     try:
-        model, classification_graph, session = classifier.load_KerasGraph("cnn/models/hand_poses_wGarbage_10.h5")
+        model, classification_graph, session = classifier.load_KerasGraph("cnn/models/hand_poses_wGarbage_100.h6")
     except Exception as e:
         print(e)
 
@@ -52,6 +52,7 @@ def worker(input_q, output_q, cropped_output_q, inferences_q, cap_params, frame_
             # classify hand pose
             if res is not None:
                 class_res = classifier.classify(model, classification_graph, session, res)
+                # print(class_res)
                 inferences_q.put(class_res)       
             
             # add frame annotated with bounding box to queue
@@ -179,6 +180,7 @@ if __name__ == '__main__':
 
         try:
             inferences = inferences_q.get_nowait()
+            print(inferences)
         except Exception as e:
             pass      
 
