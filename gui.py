@@ -13,7 +13,7 @@ def drawInferences(values, names=['', '', '', '', '', '']):
     fontColor               = (255,255,255)
     lineType                = 2
 
-    blank = np.zeros((350,600,3), np.uint8)
+    blank = np.zeros((1000,1000,3), np.uint8)
 
     for i in range(nb_classes):
         if(values[i] > 0.7):

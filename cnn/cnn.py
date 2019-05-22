@@ -14,9 +14,9 @@ import buildPosesDataset as dataset
 
 def train():
     batch_size = 128
-    epochs = 100
+    epochs = 1000
     learning_rate = 0.01
-    model_name = "cnn/models/hand_poses_wGarbage_" + str(epochs) + ".h6"
+    model_name = "cnn/models/hand_poses_wGarbage_" + str(epochs) + ".h11"
 
     # input image dimensions
     img_rows, img_cols = 28, 28

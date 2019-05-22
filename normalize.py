@@ -1,6 +1,8 @@
 import cv2
 import os
 from os.path import isfile, join
+os.system("rm Poses/.DS*")
+os.system("rm Poses/*/.DS*")
 
 print(os.listdir("Poses/"))
 

@@ -95,12 +95,12 @@ def get_hand_info(video, model, classification_graph, detection_graph, sess, ses
                 rhandpoints.append(None)
                 rhand_pred.append(None)
             for c,res in enumerate(boxed):
-                print(points[c])
+                # print(points[c])
                 # inferences = None
                 # classify hand pose
                 if res is not None:
                     class_res = classifier.classify(model, classification_graph, session, res)
-                    print(class_res)
+                    # print(class_res)
                     # inferences_q.put(class_res)
                     if c == 0:
                         rhandpoints.append(np.array(points[c]))
@@ -108,14 +108,14 @@ def get_hand_info(video, model, classification_graph, detection_graph, sess, ses
                         lhandpoints.append(np.array(points[c]))
                     try:
                         inferences = list(class_res)
-                        print(inferences)
-                        print(c)
+                        # print(inferences)
+                        # print(c)
                         if c == 0:
                             rhand_pred.append(inferences)
                         if c == 1:
                             lhand_pred.append(inferences)
                     except Exception as e:
-                        print("ECTEPTIONS")
+                        # print("ECTEPTIONS")
                         if c == 0:
                             rhand_pred.append(None)
                         if c == 1:
@@ -124,8 +124,8 @@ def get_hand_info(video, model, classification_graph, detection_graph, sess, ses
 
     return handedness, rhandpoints, lhandpoints, rhand_pred, lhand_pred
 
-model, classification_graph, detection_graph, sess, session = load_model()
-h, rh, lh, rp, lp = get_hand_info("../highqualityvideos/AGGRESSIVE.mp4", model, classification_graph, detection_graph, sess, session)
+# model, classification_graph, detection_graph, sess, session = load_model()
+# h, rh, lh, rp, lp = get_hand_info("../highqualityvideos/AGGRESSIVE.mp4", model, classification_graph, detection_graph, sess, session)
 
-print(h, rh, lh, rp, lp)
-print(rp)
+# print(h, rh, lh, rp, lp)
+# print(rp)

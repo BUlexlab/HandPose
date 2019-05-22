@@ -1,11 +1,17 @@
-from utils import detector_utils as detector_utils
-from utils import pose_classification_utils as classifier
+try:
+    from HandPose.utils import detector_utils as detector_utils
+    from HandPose.utils import pose_classification_utils as classifier
+    from HandPose.utils.detector_utils import WebcamVideoStream
+
+except:
+    from utils import detector_utils as detector_utils
+    from utils import pose_classification_utils as classifier
+    from utils.detector_utils import WebcamVideoStream
 import cv2
 import tensorflow as tf
 import multiprocessing
 from multiprocessing import Queue, Pool
 import time
-from utils.detector_utils import WebcamVideoStream
 import datetime
 import argparse
 import os; 
@@ -14,7 +20,7 @@ import keras
 import gui
 
 frame_processed = 0
-score_thresh = 0.01
+score_thresh = 0.27
 
 # Create a worker thread that loads graph and
 # does detection on images in an input queue and puts it on an output queue
@@ -27,7 +33,7 @@ def worker(input_q, output_q, cropped_output_q, inferences_q, cap_params, frame_
 
     print(">> loading keras model for worker")
     try:
-        model, classification_graph, session = classifier.load_KerasGraph("cnn/models/hand_poses_wGarbage_100.h6")
+        model, classification_graph, session = classifier.load_KerasGraph("cnn/models/hand_poses_wGarbage_100.h11")
     except Exception as e:
         print(e)
 
@@ -42,7 +48,7 @@ def worker(input_q, output_q, cropped_output_q, inferences_q, cap_params, frame_
                 frame, detection_graph, sess)
 
             # get region of interest
-            res = detector_utils.get_box_image(cap_params['num_hands_detect'], cap_params["score_thresh"],
+            res = detector_utils.get_box_image_original(cap_params['num_hands_detect'], cap_params["score_thresh"],
                 scores, boxes, cap_params['im_width'], cap_params['im_height'], frame)
             
             # draw bounding boxes
@@ -170,9 +176,10 @@ if __name__ == '__main__':
         frame = video_capture.read()
         frame = cv2.flip(frame, 1)
         index += 1
-
-        input_q.put(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
-
+        try:
+            input_q.put(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+        except:
+            pass
         output_frame = output_q.get()
         cropped_output = cropped_output_q.get()
 
@@ -210,7 +217,7 @@ if __name__ == '__main__':
                           elapsed_time, "fps: ", str(int(fps)))
 
     
-        # print("frame ",  index, num_frames, elapsed_time, fps)
+        print("frame ",  index, num_frames, elapsed_time, fps)
 
         if (output_frame is not None):
             output_frame = cv2.cvtColor(output_frame, cv2.COLOR_RGB2BGR)

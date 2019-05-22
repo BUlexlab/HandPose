@@ -1,3 +1,5 @@
+#NOTICE: THIS FILE WAS MODIFIED FROM ITS ORIGINAL FORM
+
 # Copyright 2017 The TensorFlow Authors. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +21,10 @@ import logging
 
 import tensorflow as tf
 from google.protobuf import text_format
-from protos import string_int_label_map_pb2
+try:
+    from HandPose.protos import string_int_label_map_pb2
+except:
+    from protos import string_int_label_map_pb2
 
 
 def _validate_label_map(label_map):
@@ -113,6 +118,7 @@ def load_labelmap(path):
     Returns:
       a StringIntLabelMapProto
     """
+    print(path)
     with tf.gfile.GFile(path, 'r') as fid:
         label_map_string = fid.read()
         label_map = string_int_label_map_pb2.StringIntLabelMap()

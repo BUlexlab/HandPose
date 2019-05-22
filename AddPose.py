@@ -1,7 +1,12 @@
 import numpy as np
 import cv2
 import os
-from utils import detector_utils as detector_utils
+try:
+    from HandPose.utils import detector_utils as detector_utils
+    from HandPose.utils.detector_utils import WebcamVideoStream
+except:
+    from utils.detector_utils import WebcamVideoStream
+    from utils import detector_utils as detector_utils
 import tensorflow as tf
 
 def main():
@@ -95,7 +100,7 @@ def main():
     # Define the codec and create VideoWriter object
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     out = cv2.VideoWriter(currentPath + name_pose + '.mp4', fourcc, 25.0, (width, height))
-
+    c = 0
     while(cap.isOpened()):
         ret, frame = cap.read()
         if ret:
@@ -105,6 +110,9 @@ def main():
             cv2.imshow('frame', frame)
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
+            if c == 500:
+                break
+            c += 1
         else:
             break
 
@@ -141,12 +149,15 @@ def main():
             boxes, scores = detector_utils.detect_objects(frame, detection_graph, sess)
 
             # get region of interest
-            res = detector_utils.get_box_image(1, 0.2, scores, boxes, 320, 180, frame)
-
+            res = detector_utils.get_box_image_original(1, 0.2, scores, boxes, 320, 180, frame)
+            print(type(res))
             # Save cropped image 
             if(res is not None):       
-                cv2.imwrite(currentPath + currentExample + str(_iter) + '.png', cv2.cvtColor(res, cv2.COLOR_RGB2BGR))
-
+                # try:
+                i = cv2.cvtColor(res, cv2.COLOR_RGB2BGR)
+                cv2.imwrite(currentPath + currentExample + str(_iter) + '.png', i)
+                # except:
+                #     cv2.imwrite(currentPath + currentExample + str(_iter) + '.png', res)
             _iter += 1
         # Break the loop
         else:
